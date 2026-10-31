@@ -1,0 +1,109 @@
+site_name: Failure Forensics
+site_description: AI reliability, observability and root-cause analysis platform. CMPUT 401 project documentation.
+site_url: https://undergraduateartificialintelligenceclub.github.io/Failure-Forensics/
+repo_url: https://github.com/UndergraduateArtificialIntelligenceClub/Failure-Forensics
+repo_name: Failure-Forensics
+edit_uri: edit/main/docs/
+copyright: CMPUT 401 · 2026–27 · Team Failure Forensics
+
+theme:
+  name: material
+  language: en
+  icon:
+    logo: material/magnify-scan
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - Project Requirements:
+      - Executive Summary: requirements/executive-summary.md
+      - Glossary: requirements/glossary.md
+      - User Stories: requirements/user-stories.md
+      - Research: requirements/research.md
+  - Software Design:
+      - Architecture: design/architecture.md
+      - Data Model: design/data-model.md
+      - Sequence Diagrams: design/sequence-diagrams.md
+      - Wireframes: design/wireframes.md
+  - UX and UI Design: ux-ui.md
+  - Testing: testing.md
+  - Running Locally: running-locally.md
+  - Deployment: deployment.md
+  - Project Management:
+      - Story Map: project-management/story-map.md
+      - Sprint Plans: project-management/sprint-plans.md
+  - Teamwork:
+      - Roles: teamwork/roles.md
+      - Team Canvas: teamwork/team-canvas.md
+      - Sprint 1 Progress Report: teamwork/sprint-1.md
+      - Sprint 2 Progress Report: teamwork/sprint-2.md
+      - Sprint 3 Progress Report: teamwork/sprint-3.md
+      - Sprint 4 Progress Report: teamwork/sprint-4.md
+      - Sprint 5 Progress Report: teamwork/sprint-5.md
+      - Sprint 6 Progress Report: teamwork/sprint-6.md
+      - Sprint 7 Progress Report: teamwork/sprint-7.md
+      - Sprint 8 Progress Report: teamwork/sprint-8.md
+  - Meeting Minutes:
+      - Sprint 1: meetings/sprint-1.md
+      - Sprint 2: meetings/sprint-2.md
+      - Sprint 3: meetings/sprint-3.md
+      - Sprint 4: meetings/sprint-4.md
+      - Sprint 5: meetings/sprint-5.md
+      - Sprint 6: meetings/sprint-6.md
+      - Sprint 7: meetings/sprint-7.md
+      - Sprint 8: meetings/sprint-8.md
