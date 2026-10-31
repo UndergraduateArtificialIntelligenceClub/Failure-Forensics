@@ -1,6 +1,6 @@
 # Failure Forensics documentation site
 
-MkDocs Material site in the same layout as the CMPUT 401 KneadTech docs.
+MkDocs Material site in the same layout as the KneadTech docs.
 
 ## Add to the repository
 

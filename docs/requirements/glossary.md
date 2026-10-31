@@ -20,4 +20,4 @@
 | **Fault injection** | Deliberately creating a controlled failure with a known root cause in a benchmark app. |
 | **MVP / Target / Stretch** | Scope tiers. MVP ships by M2 (29 Jan), Target by M3 (12 Feb), Stretch only if time allows. |
 | **ADR** | Architecture Decision Record, stored in Confluence and `docs/adr/`. |
-| **UAIS** | Used in the blueprint headers. *Open question: confirm with the client what it stands for.* |
+| **UAIS** | Used in the blueprint headers. *Open question: confirm what it stands for (possibly the club's name).* |

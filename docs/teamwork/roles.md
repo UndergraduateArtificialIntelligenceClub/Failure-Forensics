@@ -16,7 +16,7 @@ Roles define primary ownership, not silos. Every PR is reviewed by someone from 
 
 | Scrum role | Who |
 |---|---|
-| Product owner (client liaison) | *TBD* |
+| Product owner (sets priorities, runs the demo) | *TBD* |
 | Scrum master (rotates each sprint) | *TBD* |
 | Note taker (rotates) | *TBD* |
 

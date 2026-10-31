@@ -5,19 +5,19 @@
 !!! info "Project at a glance"
     | Item | Detail |
     |---|---|
-    | **Course** | CMPUT 401, University of Alberta, 2026–27 |
+    | **Organisation** | Undergraduate Artificial Intelligence Club, University of Alberta |
     | **Build window** | 2 Nov 2026 → 26 Feb 2027 (8 sprints) |
     | **Final demo** | First or second week of March 2027 |
     | **Team size** | 7 |
     | **Repository** | [UndergraduateArtificialIntelligenceClub/Failure-Forensics](https://github.com/UndergraduateArtificialIntelligenceClub/Failure-Forensics) |
     | **Backlog** | Jira project `KAN` · Confluence space `FF` |
 
-## Client
+## About the project
 
-The **Undergraduate Artificial Intelligence Club** at the University of Alberta, which owns the repository. The club wants a tool its members and partner teams can use to debug multi-step LLM applications (RAG pipelines, agents, document pipelines) and to teach how AI systems fail.
+Failure Forensics is a project of the **Undergraduate Artificial Intelligence Club** at the University of Alberta. There is no external client: the club team defines the scope, builds the tool and presents it at the club demo in early March 2027. The goal is a working tool members can use to debug multi-step LLM applications (RAG pipelines, agents, document pipelines) and to learn how AI systems fail.
 
-!!! note "To confirm with the client"
-    The blueprint uses the abbreviation **UAIS** in its headers and mentions a decision model called **Jev**. Both are tracked as open questions in the [Glossary](requirements/glossary.md).
+!!! note "Open questions"
+    The blueprint uses the abbreviation **UAIS** in its headers and mentions a decision model called **Jev**. Both are tracked in the [Glossary](requirements/glossary.md).
 
 ## The problem
 
@@ -57,10 +57,9 @@ flowchart LR
 
 | Stakeholder | Interest |
 |---|---|
-| Undergraduate AI Club (client) | A working, demo-able tool and clean hand-over. |
-| CMPUT 401 instructor and TA | Process, sprint artifacts, final demo in early March. |
+| Undergraduate AI Club | A working, demo-able tool built by and for club members. |
 | Development team (7) | Shipping the MVP by 29 Jan and code-complete by 26 Feb. |
-| Future maintainers | Clear docs, ADRs, tests and a reproducible local setup. |
+| Club members and future contributors | Clear docs, ADRs, tests and a reproducible local setup to keep building on it. |
 
 ## Team
 

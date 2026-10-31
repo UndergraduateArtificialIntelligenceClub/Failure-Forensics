@@ -1,10 +1,10 @@
 site_name: Failure Forensics
-site_description: AI reliability, observability and root-cause analysis platform. CMPUT 401 project documentation.
+site_description: AI reliability, observability and root-cause analysis platform. Undergraduate AI Club project documentation.
 site_url: https://undergraduateartificialintelligenceclub.github.io/Failure-Forensics/
 repo_url: https://github.com/UndergraduateArtificialIntelligenceClub/Failure-Forensics
 repo_name: Failure-Forensics
 edit_uri: edit/main/docs/
-copyright: CMPUT 401 · 2026–27 · Team Failure Forensics
+copyright: Undergraduate Artificial Intelligence Club · 2026–27 · Team Failure Forensics
 
 theme:
   name: material

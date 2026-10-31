@@ -20,7 +20,7 @@
 |---|---|---|
 | | | |
 
-## Client meeting
+## Mid-sprint check-in
 
 **Date:** TBD · **Attendees:** · **Note taker:**
 
