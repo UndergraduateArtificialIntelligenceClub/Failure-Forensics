@@ -1,0 +1,27 @@
+# Failure Forensics code ownership skeleton
+
+#
+
+# Replace placeholders with GitHub usernames or organization teams
+
+# that have write access to this repository, then uncomment the rules.
+
+#
+
+# Rules use: path-pattern @username-or-team
+
+# The last matching rule takes precedence.
+
+# Default reviewers
+
+# \* @DEFAULT_OWNER
+
+# Repository configuration and CI
+
+# /.github/ @REPOSITORY_OWNER
+
+# Documentation
+
+# /docs/ @DOCUMENTATION_OWNER
+
+# Add backend and infrastructure paths once their locations are agreed.
