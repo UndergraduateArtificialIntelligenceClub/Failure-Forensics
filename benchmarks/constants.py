@@ -1,49 +1,26 @@
-"""Constants and component keys for Failure Forensics benchmark workloads.
-
-These keys normalize span step identifiers across the Failure Forensics
-benchmark harness.
 """
-
+Standardized component keys for Failure Forensics benchmark workloads.
+"""
 from enum import Enum
 
-
 class WorkloadAKeys(str, Enum):
-    """Component keys for Workload A (Document Pipeline).
-
-    Normalizes span step identifiers across the Failure Forensics benchmark harness.
-    """
-
-    EXTRACTION: str = "doc_extraction"
-    CLASSIFICATION: str = "doc_classification"
-    SUMMARIZATION: str = "doc_summarization"
-
+    """Component keys for Workload A: Document Pipeline."""
+    EXTRACTION = "doc_extraction"
+    CLASSIFICATION = "doc_classification"
+    SUMMARIZATION = "doc_summarization"
 
 class WorkloadBKeys(str, Enum):
-    """Component keys for Workload B (RAG Application).
-
-    Normalizes span step identifiers across the Failure Forensics benchmark harness.
-    """
-
-    QUERY_REWRITE: str = "query_rewrite"
-    RETRIEVAL: str = "retrieval"
-    RERANKING: str = "reranker"
-    CONTEXT_BUILD: str = "context_builder"
-    GENERATION: str = "generator"
-
+    """Component keys for Workload B: RAG Application."""
+    QUERY_REWRITE = "query_rewrite"
+    RETRIEVAL = "retrieval"
+    RERANKING = "reranker"
+    CONTEXT_BUILD = "context_builder"
+    GENERATION = "generator"
 
 class WorkloadCKeys(str, Enum):
-    """Component keys for Workload C (Agent Application).
-
-    Normalizes span step identifiers across the Failure Forensics benchmark harness.
-    """
-
-    PLANNER: str = "planner"
-    TOOL_SELECTION: str = "tool_selector"
-    TOOL_EXECUTION: str = "tool_executor"
-
-
-__all__ = [
-    "WorkloadAKeys",
-    "WorkloadBKeys",
-    "WorkloadCKeys",
-]
+    """Component keys for Workload C: Agent Application."""
+    PLANNER = "planner"
+    TOOL_SELECTION = "tool_selector"
+    TOOL_EXECUTION = "tool_executor"
+    OBSERVATION = "observation"
+    REASONING = "reasoning"
