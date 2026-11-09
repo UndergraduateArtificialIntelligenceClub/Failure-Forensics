@@ -4,8 +4,11 @@ name: App CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, "sprint-*"]
 
+permissions:
+  contents: read
+  
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -79,4 +82,4 @@ jobs:
       - name: Test
         if: steps.detect.outputs.found == 'true'
         working-directory: frontend
-        run: npm test --if-present
+        run: npm test 
