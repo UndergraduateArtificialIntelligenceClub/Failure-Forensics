@@ -80,6 +80,7 @@ nav:
       - Data Model: design/data-model.md
       - Sequence Diagrams: design/sequence-diagrams.md
       - Evidence and Claims: design/evidence-model.md
+      - Evaluation Protocol: design/evaluation-protocol.md
       - Wireframes: design/wireframes.md
   - UX and UI Design: ux-ui.md
   - Testing: testing.md

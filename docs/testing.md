@@ -23,6 +23,8 @@ Ruff and mypy · backend unit tests · frontend lint, type-check and tests · Al
 - The RCA engine is tuned on dev only.
 - The held-out set is run **once**, in Sprint 8 (KAN-127), and reported in the evaluation report (KAN-140).
 
+See the full metric definitions, formulas, and deterministic split rules in [Evaluation Protocol](design/evaluation-protocol.md) (input to ADR-007).
+
 | Benchmark | Pipeline | Built | Example faults |
 |---|---|---|---|
 | A: Document | Extraction → Classification → Summarization | Sprint 2 | Hallucinated entity, omitted amount, schema violation |
