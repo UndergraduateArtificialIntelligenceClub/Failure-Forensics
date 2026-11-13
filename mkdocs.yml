@@ -78,6 +78,7 @@ nav:
   - Software Design:
       - Architecture: design/architecture.md
       - Data Model: design/data-model.md
+      - Root-Cause Analysis: design/rca-algorithm.md
       - Sequence Diagrams: design/sequence-diagrams.md
       - Wireframes: design/wireframes.md
   - UX and UI Design: ux-ui.md
