@@ -1,0 +1,53 @@
+[
+  {
+    "fault_id": "document_schema_fault",
+    "workload": "document",
+    "fault_type": "malformed_extraction_output",
+    "target_component": "doc_extraction",
+    "injection_parameters": {
+      "omit_field": "cleaned_text"
+    },
+    "expected_root_cause": "doc_extraction",
+    "expected_failure_category": "schema_failure",
+    "expected_downstream_impact": [
+      "doc_classification",
+      "doc_summarization"
+    ],
+    "random_seed": 101,
+    "created_at": "2026-01-15T12:00:00Z"
+  },
+  {
+    "fault_id": "rag_reranking_fault",
+    "workload": "rag",
+    "fault_type": "corrupt_ranking_scores",
+    "target_component": "reranker",
+    "injection_parameters": {
+      "reverse_scores": true
+    },
+    "expected_root_cause": "reranker",
+    "expected_failure_category": "reranking_failure",
+    "expected_downstream_impact": [
+      "context_builder",
+      "generator"
+    ],
+    "random_seed": 202,
+    "created_at": "2026-01-15T12:01:00Z"
+  },
+  {
+    "fault_id": "agent_tool_argument_fault",
+    "workload": "agent",
+    "fault_type": "malformed_tool_arguments",
+    "target_component": "tool_selector",
+    "injection_parameters": {
+      "remove_required_argument": true
+    },
+    "expected_root_cause": "tool_selector",
+    "expected_failure_category": "tool_argument_failure",
+    "expected_downstream_impact": [
+      "tool_executor",
+      "observation"
+    ],
+    "random_seed": 303,
+    "created_at": "2026-01-15T12:02:00Z"
+  }
+]
