@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from benchmarks.constants import WorkloadAKeys
@@ -48,7 +49,7 @@ def classify_text(cleaned_text: str) -> dict:
 
 
 def summarize_text(cleaned_text: str) -> dict:
-    sentences = [s.strip() for s in cleaned_text.split(".") if s.strip()]
+    sentences = [s.strip() for s in re.split(r"\.(?:\s+|$)", cleaned_text) if s.strip()]
     summary = ". ".join(sentences[:2]) + ("." if sentences else "")
     return {
         "step_key": WorkloadAKeys.SUMMARIZATION.value,

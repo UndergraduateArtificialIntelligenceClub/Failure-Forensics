@@ -40,6 +40,13 @@ def test_summarize_text():
     assert res["generated_summary"] == "First sentence. Second sentence."
 
 
+def test_summarize_text_preserves_version_numbers() -> None:
+    text = "Service upgraded to version 2.14.0 yesterday. All health checks passed."
+    result = summarize_text(text)
+    assert "2.14.0" in result["generated_summary"]
+    assert result["generated_summary"] == text
+
+
 def test_run_pipeline_end_to_end():
     fixture = {
         "id": "doc_test",
