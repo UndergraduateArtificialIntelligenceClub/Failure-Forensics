@@ -1,10 +1,13 @@
 """Standardized component keys for Failure Forensics benchmark workloads."""
+
 from enum import Enum
+
 
 class WorkloadAKeys(str, Enum):
     EXTRACTION = "doc_extraction"
     CLASSIFICATION = "doc_classification"
     SUMMARIZATION = "doc_summarization"
+
 
 class WorkloadBKeys(str, Enum):
     QUERY_REWRITE = "query_rewrite"
@@ -12,6 +15,7 @@ class WorkloadBKeys(str, Enum):
     RERANKING = "reranker"
     CONTEXT_BUILD = "context_builder"
     GENERATION = "generator"
+
 
 class WorkloadCKeys(str, Enum):
     PLANNER = "planner"

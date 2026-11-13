@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
+
 from benchmarks.constants import WorkloadAKeys
+
 
 def extract_text(raw_text: str) -> dict:
     cleaned_text = " ".join(raw_text.split())
@@ -10,22 +12,40 @@ def extract_text(raw_text: str) -> dict:
         "cleaned_text": cleaned_text,
     }
 
+
 def classify_text(cleaned_text: str) -> dict:
     text_lower = cleaned_text.lower()
-    if any(k in text_lower for k in ["billing", "invoice", "charge", "credit"]):
+    billing_kw = ["billing", "invoice", "charge", "credit", "subscription"]
+    account_kw = ["administrator", "admin", "tenant", "ownership", "deprovisioning"]
+    policy_kw = ["policy", "compliance", "compliant", "encryption", "zero-trust"]
+    tech_kw = [
+        "error",
+        "bug",
+        "issue",
+        "version",
+        "tls",
+        "timeout",
+        "database",
+        "gateway",
+    ]
+
+    if any(k in text_lower for k in billing_kw):
         category = "Billing"
-    elif any(k in text_lower for k in ["error", "bug", "issue", "tier"]):
-        category = "Technical"
-    elif any(k in text_lower for k in ["policy", "compliance"]):
+    elif any(k in text_lower for k in account_kw):
+        category = "Account"
+    elif any(k in text_lower for k in policy_kw):
         category = "Policy"
+    elif any(k in text_lower for k in tech_kw):
+        category = "Technical"
     else:
         category = "General"
-        
+
     return {
         "step_key": WorkloadAKeys.CLASSIFICATION.value,
         "cleaned_text": cleaned_text,
         "predicted_category": category,
     }
+
 
 def summarize_text(cleaned_text: str) -> dict:
     sentences = [s.strip() for s in cleaned_text.split(".") if s.strip()]
@@ -36,11 +56,12 @@ def summarize_text(cleaned_text: str) -> dict:
         "generated_summary": summary,
     }
 
+
 def run_pipeline(doc_fixture: dict) -> dict:
     ext_res = extract_text(doc_fixture.get("text", ""))
     cls_res = classify_text(ext_res["cleaned_text"])
     sum_res = summarize_text(ext_res["cleaned_text"])
-    
+
     return {
         "doc_id": doc_fixture.get("id"),
         "steps": {
@@ -52,10 +73,11 @@ def run_pipeline(doc_fixture: dict) -> dict:
         "generated_summary": sum_res["generated_summary"],
     }
 
+
 if __name__ == "__main__":
     dataset_path = Path(__file__).parent.parent / "datasets" / "document_samples.json"
     with open(dataset_path, "r", encoding="utf-8") as f:
         docs = json.load(f)
-        
+
     results = [run_pipeline(doc) for doc in docs]
     print(json.dumps(results, indent=2))
