@@ -1,12 +1,11 @@
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
+from app.detection.taxonomy import FailureCategory
 from pydantic import TypeAdapter, ValidationError
 
-from benchmarks.schemas import FailureCategory, InjectedFault, WorkloadType
-
+from benchmarks.schemas import DatasetSplit, InjectedFault, WorkloadType
 
 FIXTURE_PATH = Path(__file__).parent.parent / "datasets" / "injected_faults.json"
 FAULTS = TypeAdapter(list[InjectedFault])
@@ -30,33 +29,38 @@ def test_injected_fault_json_round_trip() -> None:
 
 
 def test_target_span_is_backwards_compatible() -> None:
-    fault = InjectedFault(
-        fault_id="legacy_target_span",
-        workload=WorkloadType.DOCUMENT,
-        fault_type="legacy_fault",
-        target_span="doc_extraction",
-        expected_root_cause="doc_extraction",
-        expected_failure_category=FailureCategory.SCHEMA_FAILURE,
-        random_seed=404,
-        created_at=datetime(2026, 1, 15, tzinfo=timezone.utc),
+    fault = InjectedFault.model_validate(
+        {
+            "fault_id": "legacy_target_span",
+            "workload": WorkloadType.DOCUMENT,
+            "fault_type": "legacy_fault",
+            "target_span": "doc.extraction",
+            "expected_root_cause": "doc.extraction",
+            "expected_failure_category": FailureCategory.SCHEMA_FAILURE,
+            "random_seed": 404,
+            "split": DatasetSplit.DEV,
+        }
     )
 
-    assert fault.target_component == "doc_extraction"
+    assert fault.target_component_key == "doc.extraction"
+    assert fault.expected_root_cause_component == "doc.extraction"
 
 
-@pytest.mark.parametrize("field", ["target_component", "expected_root_cause"])
+@pytest.mark.parametrize(
+    "field", ["target_component_key", "expected_root_cause_component"]
+)
 def test_invalid_component_key_is_rejected(field: str) -> None:
     values = {
         "fault_id": "invalid_component",
         "workload": "document",
         "fault_type": "invalid_component",
-        "target_component": "doc_extraction",
-        "expected_root_cause": "doc_extraction",
-        "expected_failure_category": "schema_failure",
+        "target_component_key": "doc.extraction",
+        "expected_root_cause_component": "doc.extraction",
+        "expected_failure_category": "SCHEMA_FAILURE",
         "random_seed": 505,
-        "created_at": "2026-01-15T12:00:00Z",
+        "split": "dev",
     }
-    values[field] = "reranker"
+    values[field] = "rag.reranker"
 
     with pytest.raises(ValidationError):
         InjectedFault.model_validate(values)
@@ -69,10 +73,18 @@ def test_invalid_failure_category_is_rejected() -> None:
                 "fault_id": "invalid_category",
                 "workload": "document",
                 "fault_type": "invalid_category",
-                "target_component": "doc_extraction",
-                "expected_root_cause": "doc_extraction",
+                "target_component_key": "doc.extraction",
+                "expected_root_cause_component": "doc.extraction",
                 "expected_failure_category": "not_a_category",
                 "random_seed": 606,
-                "created_at": "2026-01-15T12:00:00Z",
+                "split": "dev",
             }
         )
+
+
+def test_invalid_split_is_rejected() -> None:
+    fixture = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))[0]
+    fixture["split"] = "test"
+
+    with pytest.raises(ValidationError):
+        InjectedFault.model_validate(fixture)
