@@ -14,6 +14,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  sdk:
+    name: Python SDK (Ruff, mypy, pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: sdk/python/pyproject.toml
+      - name: Install
+        working-directory: sdk/python
+        run: pip install -e ".[dev]"
+      - name: Ruff lint
+        working-directory: sdk/python
+        run: ruff check .
+      - name: Ruff format check
+        working-directory: sdk/python
+        run: ruff format --check .
+      - name: mypy
+        working-directory: sdk/python
+        run: mypy failure_forensics tests examples
+      - name: pytest
+        working-directory: sdk/python
+        run: pytest
+
   backend:
     name: Backend (Ruff, mypy, pytest)
     runs-on: ubuntu-latest
