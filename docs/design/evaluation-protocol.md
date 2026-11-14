@@ -48,11 +48,11 @@ $$\text{Macro-F1} = \frac{1}{|K|} \sum_{k \in K} \frac{2 \cdot \text{Precision}_
 
 ### 2.4 Evidence Grounding Rate
 
-Measures how reliably the diagnosis explainer anchors its claims in stored trace evidence (`EvidenceRef`) prior to enforcement by the grounding gate (per `docs/design/evidence-model.md`).
+Measures how reliably the diagnosis explainer anchors its claims in stored trace evidence (`EvidenceRef`) after the grounding gate has checked them (per `docs/design/evidence-model.md`).
 
 $$\text{Evidence Grounding Rate} = \frac{N_{\text{supported}} + N_{\text{inference}}}{N_{\text{claims\_written}}}$$
 
-- **Pre-gate measurement:** Counted across all claims emitted by the explainer **before** the grounding gate strips or flags unsupported claims (measuring post-gate would trivially yield 100%).
+- **Denominator:** Includes every claim emitted before the gate. The numerator uses the gate's final `supported` or `inference` outcome, so deleting an unsupported claim cannot inflate the score.
 - **Validity requirement:** A claim counts as grounded only if its cited `EvidenceRef` resolves to a stored trace span/signal in the current trace and its content hash matches the persisted record.
 
 ### 2.5 False Positive Rate (FPR)
@@ -89,6 +89,10 @@ $$\text{Human Override Rate} = \frac{1}{|D_{\text{reviewed}}|} \sum_{d \in D_{\t
 - **Denominator:** Computed strictly over diagnoses inspected by a human reviewer ($D_{\text{reviewed}}$), excluding unreviewed diagnoses.
 - **Override criteria:** Triggered when a reviewer modifies the root-cause `component_key`, failure `category`, or overall failure `status` (via the review correction workflow). Purely stylistic edits to free-text explanation prose do not count as overrides.
 
+### 2.9 Proposed Blueprint Targets
+
+Targets are evaluated on the frozen held-out set: Top-1 $\ge 60\%$, Top-3 $\ge 85\%$, category Macro-F1 $\ge 0.70$, grounding $\ge 95\%$, false-positive rate $\le 10\%$, and p95 diagnosis latency $\le 60$ seconds. Human override rate and regression pass rate are reported without an initial threshold.
+
 ---
 
 ## 3. Deterministic Dev / Held-Out Split Rule
@@ -97,26 +101,24 @@ To prevent prompt, threshold, or rule overfitting while keeping benchmark splits
 
 ### 3.1 Stratification and Ratio
 
-- **Stratification key:** `(workload, failure_family, failure_category)` for fault-injected cases, and `(workload, "HEALTHY")` for clean baseline cases.
+- **Stratification key:** `(workload, fault_type)` for fault-injected cases, and `(workload, "HEALTHY")` for clean baseline cases. This matches the `InjectedFault.fault_type` contract rather than grouping distinct injections that happen to share a taxonomy category.
 - **Target split ratio:** **70% `dev` / 30% `held-out`** within each stratum.
-- **Minimum coverage:** Every populated `(workload, failure_category)` stratum with $\ge 2$ cases must allocate at least 1 case to `held-out`.
+- **Minimum coverage:** Every populated stratum with $\ge 2$ cases allocates at least 1 case to `held-out`.
 
 ### 3.2 Deterministic Assignment Algorithm
 
-Splits are assigned per case via cryptographic hashing of a fixed project seed (`SPLIT_SEED = "failure-forensics-v1-2026"`) and the case's immutable `case_id` (e.g., `doc_002_schema_01`):
+Within each stratum, cases are ranked by a SHA-256 digest of the fixed project seed, workload, fault type, the fault's `random_seed`, and immutable `case_id`. The first 30% (rounded up, with a minimum of one when the stratum has at least two cases) are held out. The executable reference is `benchmarks/evaluation_split.py`:
 
 ```python
-import hashlib
-
-
-def assign_split(case_id: str, seed: str = "failure-forensics-v1-2026", dev_ratio: float = 0.70) -> str:
-    digest = hashlib.sha256(f"{seed}:{case_id}".encode("utf-8")).digest()
-    bucket = int.from_bytes(digest[:8], "big") / (1 << 64)
-    return "dev" if bucket < dev_ratio else "held-out"
+assign_splits(
+    [EvaluationCase(case_id, workload, fault_type, random_seed), ...],
+    project_seed="failure-forensics-v1-2026",
+    heldout_ratio=0.30,
+)
 ```
 
-- **Why hash-bucketing over global list shuffling:** Adding new cases to one workload or fault category never shifts existing `case_id` assignments between `dev` and `held-out`.
-- **Manifest persistence:** Generated split assignments are frozen in versioned dataset manifests (`datasets/<workload>/manifest.json`) with `split`, `fault_family`, `fault_category`, and `seed` recorded per case.
+- **Why deterministic ranking over global shuffling:** Input order cannot change the result, and each fault type receives held-out coverage instead of relying on chance.
+- **Manifest persistence:** Generated assignments are frozen in versioned dataset manifests (`datasets/<workload>/manifest.json`) with `split`, `fault_type`, `failure_family`, `failure_category`, and `random_seed` recorded per case. New cases receive a split only when the manifest is deliberately regenerated and reviewed.
 
 ### 3.3 Leakage Prevention Governance
 
@@ -133,7 +135,7 @@ This draft supplies the following specifications for formal ratification in **AD
 | Decision Area | Proposed Protocol Default | Stakeholders |
 |---|---|---|
 | **Primary Accuracy Metrics** | Top-1 & Top-3 on canonical `component_key`; leaf-category Macro-F1 | T5, T7 |
-| **Grounding Rate Formula** | Pre-gate `(supported + inference) / total_claims_written` | T1, T5, T7 |
-| **Split Ratio & Seed** | 70/30 `dev`/`held-out` stratified by `(workload, category)` via SHA-256 hash bucketing (`SPLIT_SEED = "failure-forensics-v1-2026"`) | T1, T7 |
+| **Grounding Rate Formula** | Gate-verified `(supported + inference) / total_claims_written`, retaining pre-gate claims in the denominator | T1, T5, T7 |
+| **Split Ratio & Seed** | 70/30 `dev`/`held-out` stratified by `(workload, fault_type)` and ranked by project seed plus fault `random_seed` | T1, T7 |
 | **Latency Measurement** | Worker execution duration (`p50`, `p95` in `ms`), isolated from queue wait time | T3, T7 |
 | **Held-Out Governance** | Single-run freeze until Sprint 8 (`KAN-127`) | T1, T5, T7 |
