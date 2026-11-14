@@ -20,7 +20,7 @@ def test_taxonomy_matches_architecture():
 
     assert len(FailureFamily) == 6
     assert len(FailureCategory) == 31
-    assert set(c.value for c in FailureCategory) == expected_categories
+    assert {c.value for c in FailureCategory} == expected_categories
     assert "PROPAGATION_ERROR" not in FailureCategory.__members__
 
 
