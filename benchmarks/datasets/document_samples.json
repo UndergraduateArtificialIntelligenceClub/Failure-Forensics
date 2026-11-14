@@ -1,0 +1,37 @@
+[
+  {
+    "id": "doc_001",
+    "title": "Invoice Discrepancy for Subscription Tier Upgrade",
+    "text": "Our enterprise billing statement for billing cycle Q3 reflects an unexpected secondary charge following our tier upgrade to Enterprise Plus on October 1st. The initial invoice already included the prorated subscription fee for our active seats. Please credit the duplicate charge back to the corporate account balance.",
+    "expected_category": "Billing",
+    "expected_summary": "An enterprise customer reports a duplicate prorated charge on their Q3 billing statement following an upgrade to Enterprise Plus and requests a credit to their corporate account balance."
+  },
+  {
+    "id": "doc_002",
+    "title": "v2.14.0 API Gateway Release Notes",
+    "text": "Version 2.14.0 introduces token bucket rate limiting per route and fixes a connection leak occurring during TLS renegotiation on upstream proxies. Additionally, grpc-web bridging now supports bi-directional streaming endpoints with optimized memory pooling. Engineering teams are advised to review deprecation warnings before upgrading downstream services.",
+    "expected_category": "Technical",
+    "expected_summary": "Release v2.14.0 of the API Gateway adds route-level rate limiting, resolves an upstream TLS connection leak, and improves grpc-web streaming support."
+  },
+  {
+    "id": "doc_003",
+    "title": "Remote Access and Device Encryption Policy Update",
+    "text": "Effective November 15, all remote workstations connecting to internal code repositories must enforce AES-256 full-disk encryption and pass daily zero-trust posture checks. Non-compliant devices will automatically lose SSH access to staging and production bastions after a 48-hour grace period. Employees should consult the internal security portal to verify their device configuration status.",
+    "expected_category": "Policy",
+    "expected_summary": "An updated policy requires AES-256 full-disk encryption and daily zero-trust posture checks for remote repository access, revoking SSH access for non-compliant devices after 48 hours."
+  },
+  {
+    "id": "doc_004",
+    "title": "Primary Organization Admin Role Reassignment",
+    "text": "We need to reassign the primary organization administrator role for workspace tenant 8492 to a new service designated manager account. The current owner profile has been scheduled for deprovisioning following an internal team restructuring. Please initiate the ownership transfer authorization workflow so our security team can approve the handover.",
+    "expected_category": "Account",
+    "expected_summary": "A request to transfer the primary organization admin role for tenant 8492 to a new manager account ahead of scheduled owner deprovisioning."
+  },
+  {
+    "id": "doc_005",
+    "title": "Persistent 504 Gateway Timeouts on Batch Analytics Endpoint",
+    "text": "The analytics ingestion worker pool has been experiencing intermittent 504 Gateway Timeout errors during the nightly aggregation run since commit 4f9b2a. Database connection pool metrics show thread starvation occurring when concurrent batch queries exceed thirty seconds. We are temporarily throttling request concurrency while investigating missing indexes on the event log table.",
+    "expected_category": "Technical",
+    "expected_summary": "Nightly batch analytics ingestion is triggering intermittent 504 Gateway Timeouts due to database connection pool thread starvation, prompting temporary concurrency throttling."
+  }
+]
