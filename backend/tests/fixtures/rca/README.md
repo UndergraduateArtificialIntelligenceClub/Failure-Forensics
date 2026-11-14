@@ -43,7 +43,9 @@ One JSON object per file, `fixture_format: 1`.
 
 IDs, timestamps and costs are made up but consistent. Trace IDs are 32 hex characters and span IDs are 16, matching OpenTelemetry. All data is synthetic.
 
-## Suggested assertions for KAN-45
+## Automated validation and KAN-45
+
+`backend/tests/test_rca_fixtures.py` already validates the fixture contract, identifiers, links, taxonomy, expected paths and roles. KAN-45 adds assertions against the RCA implementation itself:
 
 - For RCA v0, assert only `status` and `root_cause_component`, and mark fixtures with `min_rca_version: v1` as `xfail`.
 - For RCA v1, assert `status`, the root cause fields, the category and `propagation_path` exactly. Assert `link_source` and that confidence falls in `confidence_range`.

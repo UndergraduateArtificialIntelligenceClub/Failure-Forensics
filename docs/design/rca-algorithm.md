@@ -6,7 +6,7 @@
 | Owner | T5 AI Forensics (Sashreek) |
 | Reviewer | T1 (Pranav) |
 | Jira | [KAN-28](https://pranav01.atlassian.net/browse/KAN-28) |
-| GitHub | [#8](https://github.com/UndergraduateArtificialIntelligenceClub/Failure-Forensics/issues/8) |
+| GitHub | [Issue #8](https://github.com/UndergraduateArtificialIntelligenceClub/Failure-Forensics/issues/8) · [PR #10](https://github.com/UndergraduateArtificialIntelligenceClub/Failure-Forensics/pull/10) |
 | Covers | Blueprint v1.1 §10.1 |
 
 !!! note "AI use"
@@ -87,7 +87,7 @@ b(s) = max( 1.0 if status in {error, timeout} else 0,
             max over fail/review signals of  weight(detector) × confidence × (1.0 for fail, 0.5 for review) )
 ```
 
-If a span has no informative signals and no operational error, `b(s)` is null. Pass signals never lower `b`: one confident failure is enough. See open question 4.
+If a span has no fail/review signal and no operational error, one or more `pass` signals establish `b(s) = 0`. If it has no signal at all, `b(s)` is null. A pass never offsets a fail or review: the maximum failure evidence still wins. This lets a downstream step prove that it produced a healthy output from bad input, which is the `doc-01` classification case.
 
 ### Step 3. Build the data-flow graph
 
@@ -202,7 +202,7 @@ Nine fixtures, six RAG and three document. Each has an expected root cause, cate
 
 The signals in the fixtures are hand-written stand-ins for detector output, so RCA can be tested before T4's detectors land.
 
-A throwaway script that implements steps 1 to 9 exactly as written here returns the expected answer for all nine fixtures under v1. Under v0 it passes rag-04 and rag-05 and misses the other seven, as intended. The script is not committed. The real implementation is KAN-59 and KAN-81, tested by KAN-45.
+`backend/tests/test_rca_fixtures.py` validates all nine fixtures, their IDs, links, dotted component keys, taxonomy values, expected paths and span roles. It also locks the pass-only badness rule used by `doc-01`. The real RCA implementation is KAN-59 and KAN-81, with algorithm result tests expanded by KAN-45.
 
 ## Interfaces with other roles
 
@@ -215,9 +215,9 @@ A throwaway script that implements steps 1 to 9 exactly as written here returns 
 | T6 Frontend | Role colours come from `span_roles`. `inconclusive` maps to the inconclusive screen. |
 | T7 Benchmarks | Each `InjectedFault` records the expected `component_key` and category, using the same names as these fixtures. |
 
-## Open questions
+## Decisions and open questions
 
-1. **Component key format.** The fixtures use dotted keys (`rag.reranker`) like the glossary, ADR-003 and the wireframes. PR #6 uses bare keys (`reranker`, `doc_extraction`). RCA and eval cases match on these, so we need one format. For T1 and T7.
+1. **Component key format — decided.** Dotted keys (`rag.reranker`, `doc.extraction`) are canonical across RCA, benchmarks and eval cases. Span IDs remain run-specific and are never used as benchmark labels.
 2. **Expected categories per fault.** Some are judgement calls: omitted amount as `INSTRUCTION_FAILURE`, top-k cutoff as `PARAMETER_REGRESSION`, vector store timeout as `PIPELINE / TIMEOUT` rather than `DEPENDENCY_FAILURE`. For T4, who owns the taxonomy (KAN-26), and T7.
 3. **Defaults.** θ, ε, τ and the detector weights are guesses. They get tuned on the dev split only.
 4. **Max of fails.** Pass signals never offset a fail. That is simple and explainable, but a span with one weak fail and three strong passes still scores high. Worth revisiting once real detectors exist.
