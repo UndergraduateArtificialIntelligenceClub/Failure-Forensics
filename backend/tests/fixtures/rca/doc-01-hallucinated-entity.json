@@ -1,0 +1,316 @@
+{
+  "fixture_format": 1,
+  "fixture_id": "doc-01-hallucinated-entity",
+  "workload": "document",
+  "description": "Extraction invents a customer name that is not in the document. Classification ignores it and stays correct; the summary repeats it.",
+  "fault": {
+    "fault_type": "hallucinated_entity",
+    "target_component_key": "doc.extraction",
+    "injection_parameters": {
+      "field": "customer_name",
+      "value": "Northwind Traders"
+    }
+  },
+  "trace": {
+    "id": "b8fc31132a212a0454c718109ec848d0",
+    "project_id": "proj_rca_fixtures",
+    "external_trace_id": null,
+    "started_at": "2026-11-13T01:00:00.000Z",
+    "ended_at": "2026-11-13T01:00:02.400Z",
+    "status": "ok",
+    "health": "failed",
+    "root_span_id": "9207be0a9f016df1",
+    "total_latency_ms": 2400,
+    "total_input_tokens": 540,
+    "total_output_tokens": 127,
+    "estimated_cost_usd": "0.000157",
+    "pipeline_version": "doc-v1",
+    "git_commit": null,
+    "tags": {
+      "fixture": true,
+      "workload": "document"
+    },
+    "feedback_status": "flagged"
+  },
+  "spans": [
+    {
+      "id": "9207be0a9f016df1",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "parent_span_id": null,
+      "name": "process_document",
+      "component_key": "doc.pipeline",
+      "type": "custom",
+      "started_at": "2026-11-13T01:00:00.000Z",
+      "ended_at": "2026-11-13T01:00:02.400Z",
+      "latency_ms": 2400,
+      "status": "ok",
+      "input": {
+        "doc_id": "doc_fx_001"
+      },
+      "output": {
+        "category": "Billing",
+        "summary": "Northwind Traders reports a duplicate $1,250.00 charge for the annual Team plan renewal on invoice INV-20931 and asks for the second charge to be refunded."
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "186647fa0acaef7b",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "parent_span_id": "9207be0a9f016df1",
+      "name": "extract_fields",
+      "component_key": "doc.extraction",
+      "type": "llm",
+      "started_at": "2026-11-13T01:00:00.010Z",
+      "ended_at": "2026-11-13T01:00:00.810Z",
+      "latency_ms": 800,
+      "status": "ok",
+      "input": {
+        "doc_id": "doc_fx_001",
+        "title": "Duplicate charge on annual Team plan renewal",
+        "text": "Invoice INV-20931 dated October 3 charged our account $1,250.00 for the annual Team plan renewal, and a second identical charge of $1,250.00 appeared on October 4. Our finance contact, Priya Raman, confirmed that only one renewal was authorized. Please refund the duplicate charge to the card on file."
+      },
+      "output": {
+        "fields": {
+          "invoice_id": "INV-20931",
+          "amount_usd": 1250.0,
+          "charge_dates": [
+            "2026-10-03",
+            "2026-10-04"
+          ],
+          "plan": "Team (annual)",
+          "contact_name": "Priya Raman",
+          "request": "refund the duplicate charge",
+          "customer_name": "Northwind Traders"
+        }
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "extract-v1",
+      "component_version": null,
+      "input_tokens": 220,
+      "output_tokens": 85,
+      "estimated_cost_usd": "0.000084",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "52e4c499ed97e8c9",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "parent_span_id": "9207be0a9f016df1",
+      "name": "classify",
+      "component_key": "doc.classification",
+      "type": "llm",
+      "started_at": "2026-11-13T01:00:00.820Z",
+      "ended_at": "2026-11-13T01:00:01.220Z",
+      "latency_ms": 400,
+      "status": "ok",
+      "input": {
+        "fields": {
+          "invoice_id": "INV-20931",
+          "amount_usd": 1250.0,
+          "charge_dates": [
+            "2026-10-03",
+            "2026-10-04"
+          ],
+          "plan": "Team (annual)",
+          "contact_name": "Priya Raman",
+          "request": "refund the duplicate charge",
+          "customer_name": "Northwind Traders"
+        }
+      },
+      "output": {
+        "category": "Billing"
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "classify-v1",
+      "component_version": null,
+      "input_tokens": 140,
+      "output_tokens": 4,
+      "estimated_cost_usd": "0.000023",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "9b955eb9a09e1d98",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "parent_span_id": "9207be0a9f016df1",
+      "name": "summarize",
+      "component_key": "doc.summarization",
+      "type": "llm",
+      "started_at": "2026-11-13T01:00:01.230Z",
+      "ended_at": "2026-11-13T01:00:02.390Z",
+      "latency_ms": 1160,
+      "status": "ok",
+      "input": {
+        "fields": {
+          "invoice_id": "INV-20931",
+          "amount_usd": 1250.0,
+          "charge_dates": [
+            "2026-10-03",
+            "2026-10-04"
+          ],
+          "plan": "Team (annual)",
+          "contact_name": "Priya Raman",
+          "request": "refund the duplicate charge",
+          "customer_name": "Northwind Traders"
+        }
+      },
+      "output": {
+        "summary": "Northwind Traders reports a duplicate $1,250.00 charge for the annual Team plan renewal on invoice INV-20931 and asks for the second charge to be refunded."
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "summarize-v1",
+      "component_version": null,
+      "input_tokens": 180,
+      "output_tokens": 38,
+      "estimated_cost_usd": "0.000050",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    }
+  ],
+  "links": [
+    {
+      "from_span_id": "186647fa0acaef7b",
+      "to_span_id": "52e4c499ed97e8c9",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "186647fa0acaef7b",
+      "to_span_id": "9b955eb9a09e1d98",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "52e4c499ed97e8c9",
+      "to_span_id": "9207be0a9f016df1",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "9b955eb9a09e1d98",
+      "to_span_id": "9207be0a9f016df1",
+      "relation": "consumes_output_of"
+    }
+  ],
+  "signals": [
+    {
+      "id": "sig_doc01_01",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "span_id": "186647fa0acaef7b",
+      "detector_type": "rule",
+      "check_name": "extracted_values_in_source",
+      "verdict": "fail",
+      "score": 0.83,
+      "confidence": 0.9,
+      "failure_family": "MODEL",
+      "failure_category": "HALLUCINATION",
+      "details": {
+        "field": "customer_name",
+        "value": "Northwind Traders",
+        "found_in_source": false
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_doc01_02",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "span_id": "52e4c499ed97e8c9",
+      "detector_type": "rule",
+      "check_name": "category_correct",
+      "verdict": "pass",
+      "score": 1.0,
+      "confidence": 0.9,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "expected": "Billing",
+        "observed": "Billing"
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_doc01_03",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "span_id": "9b955eb9a09e1d98",
+      "detector_type": "llm_judge",
+      "check_name": "summary_faithfulness",
+      "verdict": "fail",
+      "score": 0.4,
+      "confidence": 1.0,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "unsupported_spans": [
+          "Northwind Traders"
+        ]
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_doc01_04",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "span_id": "9207be0a9f016df1",
+      "detector_type": "user_flag",
+      "check_name": "user_flag",
+      "verdict": "fail",
+      "score": null,
+      "confidence": 1.0,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "reason": "Summary names a company that is not in the ticket."
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    }
+  ],
+  "flags": [
+    {
+      "id": "flag_doc01_01",
+      "trace_id": "b8fc31132a212a0454c718109ec848d0",
+      "span_id": null,
+      "reason": "Summary names a company that is not in the ticket.",
+      "source": "user",
+      "created_by": "fixture"
+    }
+  ],
+  "expected": {
+    "status": "diagnosed",
+    "min_rca_version": "v1",
+    "root_cause_component": "doc.extraction",
+    "root_cause_span_type": "llm",
+    "failure_family": "MODEL",
+    "failure_category": "HALLUCINATION",
+    "propagation_path": [
+      "doc.extraction",
+      "doc.summarization",
+      "doc.pipeline"
+    ],
+    "span_roles": {
+      "doc.extraction": "root_cause",
+      "doc.classification": "healthy",
+      "doc.summarization": "propagated",
+      "doc.pipeline": "failed_output"
+    },
+    "link_source": "links",
+    "confidence_range": [
+      0.7,
+      1.0
+    ]
+  }
+}
