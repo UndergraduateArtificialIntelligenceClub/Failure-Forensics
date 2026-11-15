@@ -82,6 +82,7 @@ nav:
       - Root-Cause Analysis: design/rca-algorithm.md
       - Sequence Diagrams: design/sequence-diagrams.md
       - Evidence and Claims: design/evidence-model.md
+      - Evaluation Protocol: design/evaluation-protocol.md
       - Wireframes: design/wireframes.md
       - DecisionGate: jev-access-and-DecisionGate.md
   - UX and UI Design: ux-ui.md
