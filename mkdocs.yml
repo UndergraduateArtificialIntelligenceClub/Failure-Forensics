@@ -82,6 +82,7 @@ nav:
       - Sequence Diagrams: design/sequence-diagrams.md
       - Evidence and Claims: design/evidence-model.md
       - Wireframes: design/wireframes.md
+      - DecisionGate: jev-access-and-DecisionGate.md
   - UX and UI Design: ux-ui.md
   - Testing: testing.md
   - Running Locally: running-locally.md
