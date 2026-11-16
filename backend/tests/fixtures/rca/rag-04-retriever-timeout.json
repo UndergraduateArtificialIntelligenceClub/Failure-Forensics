@@ -1,0 +1,354 @@
+{
+  "fixture_format": 1,
+  "fixture_id": "rag-04-retriever-timeout",
+  "workload": "rag",
+  "description": "The vector store times out, so the retriever returns nothing. The reranker has no detector signals and passes the empty list on. This is the only RAG fixture with an explicit operational error, so RCA v0 should already get it right.",
+  "fault": {
+    "fault_type": "retriever_timeout",
+    "target_component_key": "rag.retriever",
+    "injection_parameters": {
+      "timeout_ms": 5000
+    }
+  },
+  "trace": {
+    "id": "46841154ea0b02299c915697a8289dbe",
+    "project_id": "proj_rca_fixtures",
+    "external_trace_id": null,
+    "started_at": "2026-11-12T22:00:00.000Z",
+    "ended_at": "2026-11-12T22:00:06.550Z",
+    "status": "ok",
+    "health": "failed",
+    "root_span_id": "8a290edf26302e71",
+    "total_latency_ms": 6550,
+    "total_input_tokens": 474,
+    "total_output_tokens": 27,
+    "estimated_cost_usd": "0.000087",
+    "pipeline_version": "rag-v3",
+    "git_commit": null,
+    "tags": {
+      "fixture": true,
+      "workload": "rag"
+    },
+    "feedback_status": "flagged"
+  },
+  "spans": [
+    {
+      "id": "8a290edf26302e71",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "parent_span_id": null,
+      "name": "answer_question",
+      "component_key": "rag.pipeline",
+      "type": "custom",
+      "started_at": "2026-11-12T22:00:00.000Z",
+      "ended_at": "2026-11-12T22:00:06.550Z",
+      "latency_ms": 6550,
+      "status": "ok",
+      "input": {
+        "question": "How long do I have to get a refund on an annual plan?"
+      },
+      "output": {
+        "answer": "I could not find any information about refunds for annual plans."
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "57ef01c95a645e7b",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "parent_span_id": "8a290edf26302e71",
+      "name": "rewrite_query",
+      "component_key": "rag.query_rewrite",
+      "type": "llm",
+      "started_at": "2026-11-12T22:00:00.010Z",
+      "ended_at": "2026-11-12T22:00:00.310Z",
+      "latency_ms": 300,
+      "status": "ok",
+      "input": {
+        "question": "How long do I have to get a refund on an annual plan?"
+      },
+      "output": {
+        "query": "annual plan refund window"
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "rewrite-v2",
+      "component_version": null,
+      "input_tokens": 64,
+      "output_tokens": 9,
+      "estimated_cost_usd": "0.000015",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "2e50abd68189571b",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "parent_span_id": "8a290edf26302e71",
+      "name": "retrieve",
+      "component_key": "rag.retriever",
+      "type": "retrieval",
+      "started_at": "2026-11-12T22:00:00.320Z",
+      "ended_at": "2026-11-12T22:00:05.320Z",
+      "latency_ms": 5000,
+      "status": "timeout",
+      "input": {
+        "query": "annual plan refund window",
+        "top_k": 10
+      },
+      "output": {
+        "documents": []
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": "TimeoutError",
+      "error_message": "vector store query exceeded 5000 ms",
+      "attributes": {
+        "index": "kb-billing-v1"
+      }
+    },
+    {
+      "id": "cfadb63da130a1ec",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "parent_span_id": "8a290edf26302e71",
+      "name": "rerank",
+      "component_key": "rag.reranker",
+      "type": "reranker",
+      "started_at": "2026-11-12T22:00:05.330Z",
+      "ended_at": "2026-11-12T22:00:05.630Z",
+      "latency_ms": 300,
+      "status": "ok",
+      "input": {
+        "query": "annual plan refund window",
+        "candidate_doc_ids": []
+      },
+      "output": {
+        "documents": []
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {
+        "model": "cross-encoder-mini"
+      }
+    },
+    {
+      "id": "7be87e0b61e296c2",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "parent_span_id": "8a290edf26302e71",
+      "name": "build_context",
+      "component_key": "rag.context_builder",
+      "type": "transform",
+      "started_at": "2026-11-12T22:00:05.640Z",
+      "ended_at": "2026-11-12T22:00:05.660Z",
+      "latency_ms": 20,
+      "status": "ok",
+      "input": {
+        "doc_ids_by_rank": [],
+        "top_k": 5
+      },
+      "output": {
+        "context_doc_ids": [],
+        "context": ""
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": "ctx-v1",
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {
+        "top_k": 5
+      }
+    },
+    {
+      "id": "4daa1921dda80d85",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "parent_span_id": "8a290edf26302e71",
+      "name": "generate_answer",
+      "component_key": "rag.generator",
+      "type": "llm",
+      "started_at": "2026-11-12T22:00:05.670Z",
+      "ended_at": "2026-11-12T22:00:06.540Z",
+      "latency_ms": 870,
+      "status": "ok",
+      "input": {
+        "question": "How long do I have to get a refund on an annual plan?",
+        "context_doc_ids": []
+      },
+      "output": {
+        "answer": "I could not find any information about refunds for annual plans."
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "answer-v3",
+      "component_version": null,
+      "input_tokens": 410,
+      "output_tokens": 18,
+      "estimated_cost_usd": "0.000072",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    }
+  ],
+  "links": [
+    {
+      "from_span_id": "57ef01c95a645e7b",
+      "to_span_id": "2e50abd68189571b",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "57ef01c95a645e7b",
+      "to_span_id": "cfadb63da130a1ec",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "2e50abd68189571b",
+      "to_span_id": "cfadb63da130a1ec",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "cfadb63da130a1ec",
+      "to_span_id": "7be87e0b61e296c2",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "7be87e0b61e296c2",
+      "to_span_id": "4daa1921dda80d85",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "4daa1921dda80d85",
+      "to_span_id": "8a290edf26302e71",
+      "relation": "consumes_output_of"
+    }
+  ],
+  "signals": [
+    {
+      "id": "sig_rag04_01",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "span_id": "57ef01c95a645e7b",
+      "detector_type": "llm_judge",
+      "check_name": "query_rewrite_fidelity",
+      "verdict": "pass",
+      "score": 0.92,
+      "confidence": 0.9,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {},
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag04_02",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "span_id": "7be87e0b61e296c2",
+      "detector_type": "rule",
+      "check_name": "context_not_empty",
+      "verdict": "fail",
+      "score": 0.0,
+      "confidence": 1.0,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "context_doc_ids": []
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag04_03",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "span_id": "4daa1921dda80d85",
+      "detector_type": "rule",
+      "check_name": "answer_correctness",
+      "verdict": "fail",
+      "score": 0.0,
+      "confidence": 0.95,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "expected": "30 days",
+        "observed": "no answer"
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag04_04",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "span_id": "8a290edf26302e71",
+      "detector_type": "user_flag",
+      "check_name": "user_flag",
+      "verdict": "fail",
+      "score": null,
+      "confidence": 1.0,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "reason": "No answer: the assistant said it could not find refund information."
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    }
+  ],
+  "flags": [
+    {
+      "id": "flag_rag04_01",
+      "trace_id": "46841154ea0b02299c915697a8289dbe",
+      "span_id": null,
+      "reason": "No answer: the assistant said it could not find refund information.",
+      "source": "user",
+      "created_by": "fixture"
+    }
+  ],
+  "expected": {
+    "status": "diagnosed",
+    "min_rca_version": "v0",
+    "root_cause_component": "rag.retriever",
+    "root_cause_span_type": "retrieval",
+    "failure_family": "PIPELINE",
+    "failure_category": "TIMEOUT",
+    "propagation_path": [
+      "rag.retriever",
+      "rag.reranker",
+      "rag.context_builder",
+      "rag.generator",
+      "rag.pipeline"
+    ],
+    "span_roles": {
+      "rag.query_rewrite": "healthy",
+      "rag.retriever": "root_cause",
+      "rag.reranker": "unknown",
+      "rag.context_builder": "propagated",
+      "rag.generator": "propagated",
+      "rag.pipeline": "failed_output"
+    },
+    "link_source": "links",
+    "confidence_range": [
+      0.8,
+      1.0
+    ]
+  }
+}
