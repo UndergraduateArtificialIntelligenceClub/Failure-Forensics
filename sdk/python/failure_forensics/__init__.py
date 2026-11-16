@@ -13,6 +13,8 @@ from datetime import UTC, datetime
 from functools import wraps
 from typing import Any, ParamSpec, TypeVar
 
+from failure_forensics.models import Span, SpanLink, Trace
+
 P = ParamSpec("P")
 R = TypeVar("R")
 TracePayload = dict[str, Any]
@@ -109,7 +111,8 @@ class Forensics:
                     trace["latency_ms"] = (time.perf_counter() - started) * 1000
                     self._current_span.reset(span_token)
                     self._current_trace.reset(trace_token)
-                    self.exporter(trace)
+                    validated_trace = Trace.model_validate(trace)
+                    self.exporter(validated_trace.model_dump(mode="json"))
 
             return wrapper
 
@@ -174,4 +177,11 @@ class Forensics:
             self._current_span.reset(token)
 
 
-__all__ = ["Forensics", "InMemoryExporter", "SpanContext"]
+__all__ = [
+    "Forensics",
+    "InMemoryExporter",
+    "Span",
+    "SpanContext",
+    "SpanLink",
+    "Trace",
+]

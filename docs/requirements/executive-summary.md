@@ -57,7 +57,7 @@ The platform captures a complete execution trace, evaluates each step, finds the
 
 ## Success metrics
 
-Targets are proposals. The team confirms them in Sprint 1 and measures them on the held-out benchmark set in Sprint 8.
+These targets were confirmed without changes at the M0 architecture freeze, effective 13 November 2026. They are measured on the held-out benchmark set in Sprint 8. See the [M0 architecture freeze](../design/m0-architecture-freeze.md).
 
 | Metric | Definition | Target |
 |---|---|---|
@@ -73,7 +73,7 @@ Targets are proposals. The team confirms them in Sprint 1 and measures them on t
 
 | Milestone | Date | Meaning |
 |---|---|---|
-| M0 Architecture freeze | 13 Nov 2026 | ADR-001 to 006 approved, trace/span contract frozen |
+| M0 Architecture freeze | 13 Nov 2026 | Trace/span/link contract, success targets, and MVP scope frozen |
 | M1 Vertical slice | 11 Dec 2026 | Benchmark → SDK → ingestion → storage → trace UI works |
 | M2 MVP | 29 Jan 2027 | Flag → analyze → grounded diagnosis on document and RAG |
 | M3 Feature freeze | 12 Feb 2027 | Only bug fixes, tests, docs after this |
