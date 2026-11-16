@@ -1,1 +1,1 @@
-"""Synthetic benchmark applications and evaluation fixtures."""
+"""Synthetic benchmark applications, evaluation fixtures, and helpers."""
