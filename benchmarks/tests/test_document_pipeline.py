@@ -11,8 +11,8 @@ from benchmarks.document_pipeline.app import (
 
 
 def test_agent_keys_exist():
-    assert WorkloadCKeys.OBSERVATION.value == "observation"
-    assert WorkloadCKeys.REASONING.value == "reasoning"
+    assert WorkloadCKeys.OBSERVATION.value == "agent.observation"
+    assert WorkloadCKeys.REASONING.value == "agent.reasoning"
 
 
 def test_extract_text():

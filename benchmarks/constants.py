@@ -4,22 +4,22 @@ from enum import Enum
 
 
 class WorkloadAKeys(str, Enum):
-    EXTRACTION = "doc_extraction"
-    CLASSIFICATION = "doc_classification"
-    SUMMARIZATION = "doc_summarization"
+    EXTRACTION = "doc.extraction"
+    CLASSIFICATION = "doc.classification"
+    SUMMARIZATION = "doc.summarization"
 
 
 class WorkloadBKeys(str, Enum):
-    QUERY_REWRITE = "query_rewrite"
-    RETRIEVAL = "retrieval"
-    RERANKING = "reranker"
-    CONTEXT_BUILD = "context_builder"
-    GENERATION = "generator"
+    QUERY_REWRITE = "rag.query_rewrite"
+    RETRIEVAL = "rag.retriever"
+    RERANKING = "rag.reranker"
+    CONTEXT_BUILD = "rag.context_builder"
+    GENERATION = "rag.generator"
 
 
 class WorkloadCKeys(str, Enum):
-    PLANNER = "planner"
-    TOOL_SELECTION = "tool_selector"
-    TOOL_EXECUTION = "tool_executor"
-    OBSERVATION = "observation"
-    REASONING = "reasoning"
+    PLANNER = "agent.planner"
+    TOOL_SELECTION = "agent.tool_selector"
+    TOOL_EXECUTION = "agent.tool_executor"
+    OBSERVATION = "agent.observation"
+    REASONING = "agent.reasoning"
