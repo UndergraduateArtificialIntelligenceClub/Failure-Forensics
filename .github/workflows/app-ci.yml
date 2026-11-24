@@ -123,6 +123,10 @@ jobs:
         if: steps.detect.outputs.found == 'true'
         working-directory: frontend
         run: npm ci
+      - name: Generate API client from OpenAPI
+        if: steps.detect.outputs.found == 'true'
+        working-directory: frontend
+        run: npm run api:check
       - name: Lint
         if: steps.detect.outputs.found == 'true'
         working-directory: frontend
