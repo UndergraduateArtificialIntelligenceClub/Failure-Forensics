@@ -1,4 +1,5 @@
 import createClient, { type Middleware } from "openapi-fetch";
+import { createMockFetch } from "./mock";
 import type { components, paths } from "./schema";
 
 /**
@@ -43,7 +44,17 @@ export function createApiClient({
   return client;
 }
 
-export const api = createApiClient();
+/**
+ * "mock" (default until the backend serves /v1/traces) answers requests in the
+ * browser from src/lib/api/mock.ts. Set NEXT_PUBLIC_API_MODE=live to call the
+ * real API at NEXT_PUBLIC_API_URL.
+ */
+export const API_MODE: "mock" | "live" =
+  process.env.NEXT_PUBLIC_API_MODE === "live" ? "live" : "mock";
+
+export const api = createApiClient(
+  API_MODE === "mock" ? { fetch: createMockFetch() } : {},
+);
 
 export type ApiClient = ReturnType<typeof createApiClient>;
 

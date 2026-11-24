@@ -34,7 +34,14 @@ Types are generated from the OpenAPI spec with
     npm run api:generate   # regenerate src/lib/api/schema.d.ts after the spec changes
     npm run api:check      # what CI runs: regenerate, then fail if the file changed
 
-Set `NEXT_PUBLIC_API_URL` to point at the backend (default `http://localhost:8000`).
+### Mock API
+
+Until the backend serves `/v1/traces`, the console uses a built-in mock
+(`src/lib/api/mock.ts`) with about 140 fake traces. No server is needed.
+
+- To see edge states, add `?mock=empty`, `?mock=error` or `?mock=slow` to a page URL.
+- To use the real backend, set `NEXT_PUBLIC_API_MODE=live` and
+  `NEXT_PUBLIC_API_URL` (default `http://localhost:8000`).
 
 `openapi/openapi.json` is a console-side draft based on `docs/design/data-model.md`.
 When KAN-35 publishes the real contract, replace this file with it (or point
