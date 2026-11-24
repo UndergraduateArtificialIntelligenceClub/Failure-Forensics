@@ -1,0 +1,263 @@
+{
+  "fixture_format": 1,
+  "fixture_id": "doc-03-schema-violation",
+  "workload": "document",
+  "description": "Extraction returns the amount as a string, which breaks the contract with the next step. The exception is raised later, in summarization. Earliest-error RCA (v0) blames summarization; the schema rule on extraction lets v1 find the real cause.",
+  "fault": {
+    "fault_type": "schema_violation",
+    "target_component_key": "doc.extraction",
+    "injection_parameters": {
+      "field": "amount_usd",
+      "emit_as": "string"
+    }
+  },
+  "trace": {
+    "id": "110c8afc73955e417978ff3e7d93403e",
+    "project_id": "proj_rca_fixtures",
+    "external_trace_id": null,
+    "started_at": "2026-11-13T03:00:00.000Z",
+    "ended_at": "2026-11-13T03:00:02.400Z",
+    "status": "error",
+    "health": "failed",
+    "root_span_id": "8c80bb8264067f3b",
+    "total_latency_ms": 2400,
+    "total_input_tokens": 360,
+    "total_output_tokens": 89,
+    "estimated_cost_usd": "0.000107",
+    "pipeline_version": "doc-v1",
+    "git_commit": null,
+    "tags": {
+      "fixture": true,
+      "workload": "document"
+    },
+    "feedback_status": "none"
+  },
+  "spans": [
+    {
+      "id": "8c80bb8264067f3b",
+      "trace_id": "110c8afc73955e417978ff3e7d93403e",
+      "parent_span_id": null,
+      "name": "process_document",
+      "component_key": "doc.pipeline",
+      "type": "custom",
+      "started_at": "2026-11-13T03:00:00.000Z",
+      "ended_at": "2026-11-13T03:00:02.400Z",
+      "latency_ms": 2400,
+      "status": "error",
+      "input": {
+        "doc_id": "doc_fx_001"
+      },
+      "output": null,
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": "ValidationError",
+      "error_message": "amount_usd: Input should be a valid number, unable to parse string as a number",
+      "attributes": {}
+    },
+    {
+      "id": "e385d1266c26626b",
+      "trace_id": "110c8afc73955e417978ff3e7d93403e",
+      "parent_span_id": "8c80bb8264067f3b",
+      "name": "extract_fields",
+      "component_key": "doc.extraction",
+      "type": "llm",
+      "started_at": "2026-11-13T03:00:00.010Z",
+      "ended_at": "2026-11-13T03:00:00.810Z",
+      "latency_ms": 800,
+      "status": "ok",
+      "input": {
+        "doc_id": "doc_fx_001",
+        "title": "Duplicate charge on annual Team plan renewal",
+        "text": "Invoice INV-20931 dated October 3 charged our account $1,250.00 for the annual Team plan renewal, and a second identical charge of $1,250.00 appeared on October 4. Our finance contact, Priya Raman, confirmed that only one renewal was authorized. Please refund the duplicate charge to the card on file."
+      },
+      "output": {
+        "fields": {
+          "invoice_id": "INV-20931",
+          "amount_usd": "1,250.00 USD",
+          "charge_dates": [
+            "2026-10-03",
+            "2026-10-04"
+          ],
+          "plan": "Team (annual)",
+          "contact_name": "Priya Raman",
+          "request": "refund the duplicate charge"
+        }
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "extract-v1",
+      "component_version": null,
+      "input_tokens": 220,
+      "output_tokens": 85,
+      "estimated_cost_usd": "0.000084",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "8993ac085e57cef4",
+      "trace_id": "110c8afc73955e417978ff3e7d93403e",
+      "parent_span_id": "8c80bb8264067f3b",
+      "name": "classify",
+      "component_key": "doc.classification",
+      "type": "llm",
+      "started_at": "2026-11-13T03:00:00.820Z",
+      "ended_at": "2026-11-13T03:00:01.220Z",
+      "latency_ms": 400,
+      "status": "ok",
+      "input": {
+        "fields": {
+          "invoice_id": "INV-20931",
+          "amount_usd": "1,250.00 USD",
+          "charge_dates": [
+            "2026-10-03",
+            "2026-10-04"
+          ],
+          "plan": "Team (annual)",
+          "contact_name": "Priya Raman",
+          "request": "refund the duplicate charge"
+        }
+      },
+      "output": {
+        "category": "Billing"
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "classify-v1",
+      "component_version": null,
+      "input_tokens": 140,
+      "output_tokens": 4,
+      "estimated_cost_usd": "0.000023",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "86845f53fb7b3d91",
+      "trace_id": "110c8afc73955e417978ff3e7d93403e",
+      "parent_span_id": "8c80bb8264067f3b",
+      "name": "summarize",
+      "component_key": "doc.summarization",
+      "type": "llm",
+      "started_at": "2026-11-13T03:00:01.230Z",
+      "ended_at": "2026-11-13T03:00:01.240Z",
+      "latency_ms": 10,
+      "status": "error",
+      "input": {
+        "fields": {
+          "invoice_id": "INV-20931",
+          "amount_usd": "1,250.00 USD",
+          "charge_dates": [
+            "2026-10-03",
+            "2026-10-04"
+          ],
+          "plan": "Team (annual)",
+          "contact_name": "Priya Raman",
+          "request": "refund the duplicate charge"
+        }
+      },
+      "output": null,
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": "ValidationError",
+      "error_message": "amount_usd: Input should be a valid number, unable to parse string as a number",
+      "attributes": {}
+    }
+  ],
+  "links": [
+    {
+      "from_span_id": "e385d1266c26626b",
+      "to_span_id": "8993ac085e57cef4",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "e385d1266c26626b",
+      "to_span_id": "86845f53fb7b3d91",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "8993ac085e57cef4",
+      "to_span_id": "8c80bb8264067f3b",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "86845f53fb7b3d91",
+      "to_span_id": "8c80bb8264067f3b",
+      "relation": "consumes_output_of"
+    }
+  ],
+  "signals": [
+    {
+      "id": "sig_doc03_01",
+      "trace_id": "110c8afc73955e417978ff3e7d93403e",
+      "span_id": "e385d1266c26626b",
+      "detector_type": "rule",
+      "check_name": "output_schema_valid",
+      "verdict": "fail",
+      "score": 0.0,
+      "confidence": 0.95,
+      "failure_family": "PIPELINE",
+      "failure_category": "SCHEMA_FAILURE",
+      "details": {
+        "field": "amount_usd",
+        "expected_type": "number",
+        "observed": "1,250.00 USD"
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_doc03_02",
+      "trace_id": "110c8afc73955e417978ff3e7d93403e",
+      "span_id": "8993ac085e57cef4",
+      "detector_type": "rule",
+      "check_name": "category_correct",
+      "verdict": "pass",
+      "score": 1.0,
+      "confidence": 0.9,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "expected": "Billing",
+        "observed": "Billing"
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    }
+  ],
+  "flags": [],
+  "expected": {
+    "status": "diagnosed",
+    "min_rca_version": "v1",
+    "root_cause_component": "doc.extraction",
+    "root_cause_span_type": "llm",
+    "failure_family": "PIPELINE",
+    "failure_category": "SCHEMA_FAILURE",
+    "propagation_path": [
+      "doc.extraction",
+      "doc.summarization",
+      "doc.pipeline"
+    ],
+    "span_roles": {
+      "doc.extraction": "root_cause",
+      "doc.classification": "healthy",
+      "doc.summarization": "propagated",
+      "doc.pipeline": "failed_output"
+    },
+    "link_source": "links",
+    "confidence_range": [
+      0.7,
+      1.0
+    ]
+  }
+}

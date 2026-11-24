@@ -1,0 +1,555 @@
+{
+  "fixture_format": 1,
+  "fixture_id": "rag-03-topk-cutoff-drops-relevant-doc",
+  "workload": "rag",
+  "description": "The context builder's top_k was changed from 5 to 1. Retrieval and reranking are fine (the right document is at rank 2), but only rank 1 reaches the generator.",
+  "fault": {
+    "fault_type": "topk_cutoff",
+    "target_component_key": "rag.context_builder",
+    "injection_parameters": {
+      "top_k": 1,
+      "baseline_top_k": 5
+    }
+  },
+  "trace": {
+    "id": "cbfddcdf5c49ca340c0226b92c871e01",
+    "project_id": "proj_rca_fixtures",
+    "external_trace_id": null,
+    "started_at": "2026-11-12T21:00:00.000Z",
+    "ended_at": "2026-11-12T21:00:01.850Z",
+    "status": "ok",
+    "health": "failed",
+    "root_span_id": "75258f61f5a0097f",
+    "total_latency_ms": 1850,
+    "total_input_tokens": 474,
+    "total_output_tokens": 27,
+    "estimated_cost_usd": "0.000087",
+    "pipeline_version": "rag-v3",
+    "git_commit": null,
+    "tags": {
+      "fixture": true,
+      "workload": "rag"
+    },
+    "feedback_status": "flagged"
+  },
+  "spans": [
+    {
+      "id": "75258f61f5a0097f",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "parent_span_id": null,
+      "name": "answer_question",
+      "component_key": "rag.pipeline",
+      "type": "custom",
+      "started_at": "2026-11-12T21:00:00.000Z",
+      "ended_at": "2026-11-12T21:00:01.850Z",
+      "latency_ms": 1850,
+      "status": "ok",
+      "input": {
+        "question": "How long do I have to get a refund on an annual plan?"
+      },
+      "output": {
+        "answer": "You can get a refund within 14 days of the charge."
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "5a31ac03b6699439",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "parent_span_id": "75258f61f5a0097f",
+      "name": "rewrite_query",
+      "component_key": "rag.query_rewrite",
+      "type": "llm",
+      "started_at": "2026-11-12T21:00:00.010Z",
+      "ended_at": "2026-11-12T21:00:00.310Z",
+      "latency_ms": 300,
+      "status": "ok",
+      "input": {
+        "question": "How long do I have to get a refund on an annual plan?"
+      },
+      "output": {
+        "query": "annual plan refund window"
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "rewrite-v2",
+      "component_version": null,
+      "input_tokens": 64,
+      "output_tokens": 9,
+      "estimated_cost_usd": "0.000015",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    },
+    {
+      "id": "791be96dcc144be6",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "parent_span_id": "75258f61f5a0097f",
+      "name": "retrieve",
+      "component_key": "rag.retriever",
+      "type": "retrieval",
+      "started_at": "2026-11-12T21:00:00.320Z",
+      "ended_at": "2026-11-12T21:00:00.620Z",
+      "latency_ms": 300,
+      "status": "ok",
+      "input": {
+        "query": "annual plan refund window",
+        "top_k": 10
+      },
+      "output": {
+        "documents": [
+          {
+            "doc_id": "kb_monthly_refund",
+            "rank": 1,
+            "score": 0.91,
+            "text": "Monthly plans can be cancelled at any time. Refunds for monthly plans are available within 14 days of the charge."
+          },
+          {
+            "doc_id": "kb_annual_refund",
+            "rank": 2,
+            "score": 0.89,
+            "text": "Annual plans can be refunded in full within 30 days of purchase. After 30 days, annual plans are not refundable."
+          },
+          {
+            "doc_id": "kb_cancel_steps",
+            "rank": 3,
+            "score": 0.74,
+            "text": "To cancel a plan, open Settings, choose Billing, then select Cancel plan."
+          },
+          {
+            "doc_id": "kb_enterprise_terms",
+            "rank": 4,
+            "score": 0.71,
+            "text": "Enterprise contracts follow the refund terms in the signed order form."
+          },
+          {
+            "doc_id": "kb_payment_methods",
+            "rank": 5,
+            "score": 0.66,
+            "text": "We accept Visa, Mastercard and American Express. Annual plans can also be paid by bank transfer."
+          },
+          {
+            "doc_id": "kb_trial",
+            "rank": 6,
+            "score": 0.61,
+            "text": "Free trials last 14 days and do not require a payment method."
+          },
+          {
+            "doc_id": "kb_upgrade_proration",
+            "rank": 7,
+            "score": 0.55,
+            "text": "Upgrades take effect immediately and the price difference is prorated for the rest of the billing period."
+          },
+          {
+            "doc_id": "kb_invoice_download",
+            "rank": 8,
+            "score": 0.52,
+            "text": "Invoices can be downloaded as PDF from the Billing page for the last 24 months."
+          },
+          {
+            "doc_id": "kb_seat_changes",
+            "rank": 9,
+            "score": 0.47,
+            "text": "Seats can be added at any time. Removed seats are credited on the next invoice."
+          },
+          {
+            "doc_id": "kb_tax",
+            "rank": 10,
+            "score": 0.42,
+            "text": "Sales tax is calculated from the billing address on the account."
+          }
+        ]
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {
+        "index": "kb-billing-v1"
+      }
+    },
+    {
+      "id": "ee2b9cef8eb50759",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "parent_span_id": "75258f61f5a0097f",
+      "name": "rerank",
+      "component_key": "rag.reranker",
+      "type": "reranker",
+      "started_at": "2026-11-12T21:00:00.630Z",
+      "ended_at": "2026-11-12T21:00:00.930Z",
+      "latency_ms": 300,
+      "status": "ok",
+      "input": {
+        "query": "annual plan refund window",
+        "candidate_doc_ids": [
+          "kb_monthly_refund",
+          "kb_annual_refund",
+          "kb_cancel_steps",
+          "kb_enterprise_terms",
+          "kb_payment_methods",
+          "kb_trial",
+          "kb_upgrade_proration",
+          "kb_invoice_download",
+          "kb_seat_changes",
+          "kb_tax"
+        ]
+      },
+      "output": {
+        "documents": [
+          {
+            "doc_id": "kb_monthly_refund",
+            "rank": 1,
+            "score": 0.95
+          },
+          {
+            "doc_id": "kb_annual_refund",
+            "rank": 2,
+            "score": 0.88
+          },
+          {
+            "doc_id": "kb_cancel_steps",
+            "rank": 3,
+            "score": 0.81
+          },
+          {
+            "doc_id": "kb_trial",
+            "rank": 4,
+            "score": 0.74
+          },
+          {
+            "doc_id": "kb_enterprise_terms",
+            "rank": 5,
+            "score": 0.67
+          },
+          {
+            "doc_id": "kb_payment_methods",
+            "rank": 6,
+            "score": 0.6
+          },
+          {
+            "doc_id": "kb_upgrade_proration",
+            "rank": 7,
+            "score": 0.53
+          },
+          {
+            "doc_id": "kb_invoice_download",
+            "rank": 8,
+            "score": 0.46
+          },
+          {
+            "doc_id": "kb_seat_changes",
+            "rank": 9,
+            "score": 0.39
+          },
+          {
+            "doc_id": "kb_tax",
+            "rank": 10,
+            "score": 0.32
+          }
+        ]
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {
+        "model": "cross-encoder-mini"
+      }
+    },
+    {
+      "id": "8f9b66082ee29b37",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "parent_span_id": "75258f61f5a0097f",
+      "name": "build_context",
+      "component_key": "rag.context_builder",
+      "type": "transform",
+      "started_at": "2026-11-12T21:00:00.940Z",
+      "ended_at": "2026-11-12T21:00:00.960Z",
+      "latency_ms": 20,
+      "status": "ok",
+      "input": {
+        "doc_ids_by_rank": [
+          "kb_monthly_refund",
+          "kb_annual_refund",
+          "kb_cancel_steps",
+          "kb_trial",
+          "kb_enterprise_terms",
+          "kb_payment_methods",
+          "kb_upgrade_proration",
+          "kb_invoice_download",
+          "kb_seat_changes",
+          "kb_tax"
+        ],
+        "top_k": 1
+      },
+      "output": {
+        "context_doc_ids": [
+          "kb_monthly_refund"
+        ],
+        "context": "Monthly plans can be cancelled at any time. Refunds for monthly plans are available within 14 days of the charge."
+      },
+      "model_provider": null,
+      "model_name": null,
+      "prompt_version": null,
+      "component_version": "ctx-v2",
+      "input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "error_type": null,
+      "error_message": null,
+      "attributes": {
+        "top_k": 1
+      }
+    },
+    {
+      "id": "c471879bb2052e6a",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "parent_span_id": "75258f61f5a0097f",
+      "name": "generate_answer",
+      "component_key": "rag.generator",
+      "type": "llm",
+      "started_at": "2026-11-12T21:00:00.970Z",
+      "ended_at": "2026-11-12T21:00:01.840Z",
+      "latency_ms": 870,
+      "status": "ok",
+      "input": {
+        "question": "How long do I have to get a refund on an annual plan?",
+        "context_doc_ids": [
+          "kb_monthly_refund"
+        ]
+      },
+      "output": {
+        "answer": "You can get a refund within 14 days of the charge."
+      },
+      "model_provider": "openai",
+      "model_name": "gpt-4o-mini",
+      "prompt_version": "answer-v3",
+      "component_version": null,
+      "input_tokens": 410,
+      "output_tokens": 18,
+      "estimated_cost_usd": "0.000072",
+      "error_type": null,
+      "error_message": null,
+      "attributes": {}
+    }
+  ],
+  "links": [
+    {
+      "from_span_id": "5a31ac03b6699439",
+      "to_span_id": "791be96dcc144be6",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "5a31ac03b6699439",
+      "to_span_id": "ee2b9cef8eb50759",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "791be96dcc144be6",
+      "to_span_id": "ee2b9cef8eb50759",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "ee2b9cef8eb50759",
+      "to_span_id": "8f9b66082ee29b37",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "8f9b66082ee29b37",
+      "to_span_id": "c471879bb2052e6a",
+      "relation": "consumes_output_of"
+    },
+    {
+      "from_span_id": "c471879bb2052e6a",
+      "to_span_id": "75258f61f5a0097f",
+      "relation": "consumes_output_of"
+    }
+  ],
+  "signals": [
+    {
+      "id": "sig_rag03_01",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "5a31ac03b6699439",
+      "detector_type": "llm_judge",
+      "check_name": "query_rewrite_fidelity",
+      "verdict": "pass",
+      "score": 0.92,
+      "confidence": 0.9,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {},
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag03_02",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "791be96dcc144be6",
+      "detector_type": "llm_judge",
+      "check_name": "retrieval_relevance",
+      "verdict": "pass",
+      "score": 0.88,
+      "confidence": 0.9,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "relevant_doc_ids": [
+          "kb_annual_refund"
+        ],
+        "best_relevant_rank": 2
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag03_03",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "ee2b9cef8eb50759",
+      "detector_type": "rule",
+      "check_name": "relevant_doc_rank_drop",
+      "verdict": "pass",
+      "score": 1.0,
+      "confidence": 0.9,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "doc_id": "kb_annual_refund",
+        "rank_before": 2,
+        "rank_after": 2
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag03_04",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "8f9b66082ee29b37",
+      "detector_type": "rule",
+      "check_name": "context_contains_relevant",
+      "verdict": "fail",
+      "score": 0.0,
+      "confidence": 0.8,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "relevant_doc_ids": [
+          "kb_annual_refund"
+        ],
+        "context_doc_ids": [
+          "kb_monthly_refund"
+        ]
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag03_05",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "8f9b66082ee29b37",
+      "detector_type": "statistic",
+      "check_name": "config_drift",
+      "verdict": "fail",
+      "score": null,
+      "confidence": 0.9,
+      "failure_family": "CONFIGURATION",
+      "failure_category": "PARAMETER_REGRESSION",
+      "details": {
+        "attribute": "top_k",
+        "value": 1,
+        "baseline": 5,
+        "baseline_component_version": "ctx-v1"
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag03_06",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "c471879bb2052e6a",
+      "detector_type": "rule",
+      "check_name": "answer_correctness",
+      "verdict": "fail",
+      "score": 0.0,
+      "confidence": 0.95,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "expected": "30 days",
+        "observed": "14 days"
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    },
+    {
+      "id": "sig_rag03_07",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": "75258f61f5a0097f",
+      "detector_type": "user_flag",
+      "check_name": "user_flag",
+      "verdict": "fail",
+      "score": null,
+      "confidence": 1.0,
+      "failure_family": null,
+      "failure_category": null,
+      "details": {
+        "reason": "Wrong refund window: annual plans have 30 days, not 14."
+      },
+      "evidence_ids": [],
+      "evaluator_version": "fixture-v1"
+    }
+  ],
+  "flags": [
+    {
+      "id": "flag_rag03_01",
+      "trace_id": "cbfddcdf5c49ca340c0226b92c871e01",
+      "span_id": null,
+      "reason": "Wrong refund window: annual plans have 30 days, not 14.",
+      "source": "user",
+      "created_by": "fixture"
+    }
+  ],
+  "expected": {
+    "status": "diagnosed",
+    "min_rca_version": "v1",
+    "root_cause_component": "rag.context_builder",
+    "root_cause_span_type": "transform",
+    "failure_family": "CONFIGURATION",
+    "failure_category": "PARAMETER_REGRESSION",
+    "propagation_path": [
+      "rag.context_builder",
+      "rag.generator",
+      "rag.pipeline"
+    ],
+    "span_roles": {
+      "rag.query_rewrite": "healthy",
+      "rag.retriever": "healthy",
+      "rag.reranker": "healthy",
+      "rag.context_builder": "root_cause",
+      "rag.generator": "degraded",
+      "rag.pipeline": "failed_output"
+    },
+    "link_source": "links",
+    "confidence_range": [
+      0.6,
+      1.0
+    ]
+  }
+}

@@ -78,8 +78,13 @@ nav:
   - Software Design:
       - Architecture: design/architecture.md
       - Data Model: design/data-model.md
+      - M0 Architecture Freeze: design/m0-architecture-freeze.md
+      - Root-Cause Analysis: design/rca-algorithm.md
       - Sequence Diagrams: design/sequence-diagrams.md
+      - Evidence and Claims: design/evidence-model.md
+      - Evaluation Protocol: design/evaluation-protocol.md
       - Wireframes: design/wireframes.md
+      - DecisionGate: jev-access-and-DecisionGate.md
   - UX and UI Design: ux-ui.md
   - Testing: testing.md
   - Running Locally: running-locally.md
