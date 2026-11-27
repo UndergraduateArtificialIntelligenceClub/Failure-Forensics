@@ -10,8 +10,8 @@
 
 | Key | Story | Owner | Pts | Status |
 |---|---|---|---|---|
-| [KAN-35](https://pranav01.atlassian.net/browse/KAN-35) | Publish OpenAPI contract v1 with mock server | T1 | 5 | To Do |
-| [KAN-36](https://pranav01.atlassian.net/browse/KAN-36) | Run sprint 1 integration review | T1 | 2 | To Do |
+| [KAN-35](https://pranav01.atlassian.net/browse/KAN-35) | Publish OpenAPI contract v1 with mock server | T1 | 5 | In Review |
+| [KAN-36](https://pranav01.atlassian.net/browse/KAN-36) | Run sprint 1 integration review | T1 | 2 | In Review |
 | [KAN-37](https://pranav01.atlassian.net/browse/KAN-37) | SDK core: Forensics client, @trace decorator, span context manager | T2 | 5 | To Do |
 | [KAN-38](https://pranav01.atlassian.net/browse/KAN-38) | SDK batching exporter with retry and background flush | T2 | 3 | To Do |
 | [KAN-39](https://pranav01.atlassian.net/browse/KAN-39) | POST /v1/ingest/batch: idempotent upsert of traces, spans and links | T2 | 5 | To Do |
@@ -30,7 +30,11 @@ Planned: **67 points**. Completed: ___ points.
 
 ## Demo
 
-*What was shown at the sprint review, with links to recordings.*
+- The OpenAPI v1 mock serves every MVP route and supports the frontend's local
+  API URL.
+- The Sprint 1 SDK exports a validated trace to the batch ingestion boundary;
+  the demo and CI integration test are documented in the Sprint 1 integration
+  review.
 
 ## Burndown
 
