@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+
 from app.detection.taxonomy import FailureCategory, FailureFamily
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "rca"

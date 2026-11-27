@@ -1,6 +1,7 @@
 import pytest
-from app.mock_server import TRACE_ID, app
 from fastapi.testclient import TestClient
+
+from app.mock_server import TRACE_ID, app
 
 
 def test_mock_server_exposes_contract_and_frontend_cors() -> None:
